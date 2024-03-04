@@ -1,6 +1,7 @@
 package br.com.fiap.moneyminder.controller;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,18 +48,7 @@ public class CategoriaController {
     public ResponseEntity<Categoria> get(@PathVariable Long id) {
         log.info("Buscar por id: {}", id);
 
-        // for (Categoria categoria : repository ){
-        // if (categoria.id().equals(id)){
-        // return ResponseEntity
-        // .status(HttpStatus.OK)
-        // .body(categoria);
-        // }
-        // }
-
-        var optionalCategoria = repository
-                .stream()
-                .filter(c -> c.id().equals(id))
-                .findFirst();
+        var optionalCategoria = buscarCategoriaPorId(id);
 
         if (optionalCategoria.isEmpty())
             return ResponseEntity.notFound().build();
@@ -70,10 +60,7 @@ public class CategoriaController {
     public ResponseEntity<Object>destroy(@PathVariable Long id){
         log.info("Apagando categoria{}", id);
 
-        var optionalCategoria = repository
-            .stream()
-            .filter(c -> !c.id().equals(id))
-            .findFirst();
+        var optionalCategoria = buscarCategoriaPorId(id);
 
         if(optionalCategoria.isEmpty())
             return ResponseEntity.notFound().build();
@@ -89,10 +76,7 @@ public class CategoriaController {
 
         log.info("Atualizando a categoria id{} para {}", id, categoria);
 
-        var optionalCategoria = repository
-            .stream()
-            .filter(c -> c.id().equals(id))
-            .findFirst();
+        var optionalCategoria = buscarCategoriaPorId(id);
 
         if(optionalCategoria.isEmpty())
             return ResponseEntity.notFound().build();
@@ -101,8 +85,17 @@ public class CategoriaController {
         var categoriaAtualizada = new Categoria(id, categoria.nome(), categoria.icone());
         repository.remove(categoriaEncontrada);
         repository.add(categoriaAtualizada);
+
         return ResponseEntity.ok().body(categoriaAtualizada);
 
+    }
+    
+    private Optional<Categoria> buscarCategoriaPorId(Long id) {
+        var optionalCategoria = repository
+                .stream()
+                .filter(c -> c.id().equals(id))
+                .findFirst();
+        return optionalCategoria;
     }
 
 }
