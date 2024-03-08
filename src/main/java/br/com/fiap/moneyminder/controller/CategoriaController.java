@@ -47,11 +47,6 @@ public class CategoriaController {
                 .body(categoria);
     }
 
-    // @GetMapping("{id}")
-    // public ResponseEntity<Categoria> get(@PathVariable Long id) {
-    //     var categoria = categoriaRepository.getReferenceById(id);
-    //     return ResponseEntity.ok(categoria);
-    // }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object>destroy(@PathVariable Long id){
@@ -60,23 +55,5 @@ public class CategoriaController {
         return ResponseEntity.noContent().build();
     }
 
-    // @PutMapping("{id}")
-    // public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Categoria categoria){
-
-    //     log.info("Atualizando a categoria id{} para {}", id, categoria);
-
-    //     var optionalCategoria = buscarCategoriaPorId(id);
-
-    //     if(optionalCategoria.isEmpty())
-    //         return ResponseEntity.notFound().build();
-        
-    //     var categoriaEncontrada = optionalCategoria.get();
-    //     var categoriaAtualizada = new Categoria(id, categoria.nome(), categoria.icone());
-    //     repository.remove(categoriaEncontrada);
-    //     repository.add(categoriaAtualizada);
-
-    //     return ResponseEntity.ok().body(categoriaAtualizada);
-
-    // }
 
 }
