@@ -1,5 +1,6 @@
 package br.com.fiap.moneyminder.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
