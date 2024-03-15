@@ -2,12 +2,14 @@ package br.com.fiap.moneyminder.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +24,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.moneyminder.model.Categoria;
 import br.com.fiap.moneyminder.repository.CategoriaRepository;
-
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("categoria")
+@Slf4j
 public class CategoriaController {
 
-    Logger log = LoggerFactory.getLogger(getClass());
     
     @Autowired
     CategoriaRepository categoriaRepository;
@@ -41,7 +43,6 @@ public class CategoriaController {
 
     @GetMapping("{id}")
     public ResponseEntity<Categoria> get(@PathVariable Long id) {
-    log.info("Buscar por id: {}", id);
     
     return categoriaRepository
                 .findById(id)
@@ -51,7 +52,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
     public Categoria create(@RequestBody Categoria categoria) {
         log.info("cadastrando categoria: {}", categoria);
         categoriaRepository.save(categoria);
@@ -59,6 +60,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
     public ResponseEntity<Object>destroy(@PathVariable Long id){
         log.info("Apagando por id: {}", id);
 
@@ -69,14 +71,12 @@ public class CategoriaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Categoria categoria){
-    log.info("atualizando categoria id {} para {}", id, categoria);
+    public Categoria update(@PathVariable Long id, @RequestBody Categoria categoria){
 
     verificarSeExisteCategoria(id);
     
         categoria.setId(id);
-        categoriaRepository.save(categoria);
-        return ResponseEntity.ok(categoria);
+        return categoriaRepository.save(categoria);
     
 
     }
@@ -85,8 +85,11 @@ public class CategoriaController {
         categoriaRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada")
+                () -> new ResponseStatusException(NOT_FOUND, "Categoria não encontrada")
             );
     }
 
 }
+
+
+
