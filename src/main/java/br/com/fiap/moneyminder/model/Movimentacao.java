@@ -3,6 +3,7 @@ package br.com.fiap.moneyminder.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import br.com.fiap.moneyminder.validation.TipoMovimentacao;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +28,10 @@ public class Movimentacao {
 
     private LocalDate data; 
     
-    // @TipoMovimentacao
+    @TipoMovimentacao
     private String tipo; // ENTRADA | SAIDA
     
+    
+
 }
 
